@@ -1,0 +1,208 @@
+PROJECT DIRECTORY STRUCTURE
+═══════════════════════════════════════════════════════════════════════════════
+
+Revise/
+│
+├── 📄 Configuration Files
+│   ├── package.json              ✅ Dependencies & scripts
+│   ├── vite.config.js            ✅ Vite build configuration
+│   ├── tailwind.config.js        ✅ Tailwind CSS theme
+│   ├── postcss.config.js         ✅ PostCSS configuration
+│   ├── tsconfig.json             ⚠️  For IDE support (not used)
+│   ├── .eslintrc.json            ✅ ESLint rules
+│   ├── .gitignore                ✅ Git ignore patterns
+│   └── index.html                ✅ HTML entry point
+│
+├── 📂 src/ (Main Source Code)
+│   │
+│   ├── 📄 Entry Points
+│   │   ├── index.jsx             ✅ React entry point
+│   │   ├── App.jsx               ✅ Routes & main app
+│   │   └── index.css             ✅ Tailwind imports
+│   │
+│   ├── 📂 pages/ (Full Page Components - 6 files)
+│   │   ├── Home.jsx              ✅ Landing page (redirects)
+│   │   ├── Signin.jsx            ✅ Login page
+│   │   ├── Signup.jsx            ✅ Registration page
+│   │   ├── Dashboard.jsx         ✅ Main auction board
+│   │   ├── AuctionPage.jsx       ✅ Auction details page
+│   │   └── CreateRFQ.jsx         ✅ Create RFQ form
+│   │
+│   ├── 📂 components/ (Reusable Components - 4 files)
+│   │   ├── Header.jsx            ✅ Top navigation
+│   │   ├── AuctionBoard.jsx      ✅ Auction table
+│   │   ├── AuctionDetails.jsx    ✅ Auction detail view
+│   │   └── BidForm.jsx           ✅ Bid form
+│   │
+│   ├── 📂 lib/ (Business Logic - 3 files)
+│   │   ├── db.js                 ✅ In-memory database
+│   │   ├── utils.js              ✅ Helper functions
+│   │   └── types.js              ✅ Type definitions
+│   │
+│   └── (Total: 16 files)
+│
+├── 📚 Documentation
+│   ├── README.md                 ✅ Full documentation
+│   ├── QUICKSTART.md             ✅ 60-second guide ⭐
+│   ├── SETUP.md                  ✅ Detailed setup
+│   ├── CONVERSION.md             ✅ Migration details
+│   ├── FILE_INVENTORY.md         ✅ File listing
+│   └── INSTALLATION.txt          ✅ Summary
+
+├── 🛠️ Utility Scripts
+│   └── verify.sh                 ✅ Verification script
+│
+└── 📦 Dependencies (not shown)
+    └── node_modules/             (created after npm install)
+
+
+TOTAL FILES CREATED: 28
+
+FILE BREAKDOWN:
+═══════════════════════════════════════════════════════════════════════════════
+
+Source Code:
+  - 6 Page components    (src/pages/)
+  - 4 UI components      (src/components/)
+  - 3 Library files      (src/lib/)
+  - 3 Entry files        (src/App.jsx, index.jsx, index.css)
+  ────────────────────
+  Total: 16 JSX/JS/CSS files
+
+Configuration:
+  - 8 Config files       (package.json, vite, tailwind, etc)
+  - 1 HTML file          (index.html)
+  ────────────────────
+  Total: 9 files
+
+Documentation:
+  - 5 Documentation files
+  - 1 Utility script
+  ────────────────────
+  Total: 6 files
+
+
+KEY DIRECTORIES:
+═══════════════════════════════════════════════════════════════════════════════
+
+src/
+├── pages/          Pages that map to routes
+├── components/     Reusable UI components
+└── lib/           Business logic & utilities
+
+
+COMPONENT HIERARCHY:
+═══════════════════════════════════════════════════════════════════════════════
+
+App.jsx (Root)
+├── Home.jsx
+├── Signin.jsx
+│   └── Header.jsx
+├── Signup.jsx
+│   └── Header.jsx
+├── Dashboard.jsx
+│   ├── Header.jsx
+│   └── AuctionBoard.jsx
+│       └── Link to AuctionPage
+├── AuctionPage.jsx
+│   ├── Header.jsx
+│   └── AuctionDetails.jsx
+│       ├── Bid listing
+│       └── BidForm.jsx
+└── CreateRFQ.jsx
+    └── Header.jsx
+
+
+ROUTES:
+═══════════════════════════════════════════════════════════════════════════════
+
+/                  → Home.jsx (redirects to /dashboard or /signup)
+/signin            → Signin.jsx
+/signup            → Signup.jsx
+/dashboard         → Dashboard.jsx
+/auction/:id       → AuctionPage.jsx
+/create-rfq        → CreateRFQ.jsx
+
+
+DATABASE STRUCTURE (src/lib/db.js):
+═════════════════════════════════════════════════════════════════════════════
+
+Maps:
+  - db.users   → User records
+  - db.rfqs    → RFQ records
+  - db.auctions   → Auction records
+  - db.bids    → Bid records
+  - db.logs    → Auction logs
+
+Operations:
+  - createUser()           - Create new user
+  - createRFQ()            - Create RFQ
+  - createAuction()        - Create auction
+  - createBid()            - Place bid
+  - getAuctionState()      - Get aggregate auction data
+  - seedDatabase()         - Populate demo data
+
+
+STYLING HIERARCHY (src/index.css):
+═════════════════════════════════════════════════════════════════════════════
+
+@tailwind base;         → Base styles
+@tailwind components;   → Component classes
+@tailwind utilities;    → Utility classes
+
++ CSS Variables for theming (dark/light mode)
+
+
+UTILITIES (src/lib/utils.js):
+═════════════════════════════════════════════════════════════════════════════
+
+- formatDateTime()       - Format dates
+- formatCurrency()       - Format numbers as currency
+- formatDate()          - Format dates only
+- formatTime()          - Format time only
+- getTimeRemaining()    - Calculate time to deadline
+
+
+FILE SIZES (Approximate):
+═════════════════════════════════════════════════════════════════════════════
+
+Individual files:
+  - src/pages/*.jsx              100-300 lines each
+  - src/components/*.jsx         50-200 lines each
+  - src/lib/*.js                 100-300 lines each
+  - Configuration files          10-50 lines each
+
+Total code: ~3000 lines
+Production bundle: ~50-80KB (minified & gzipped)
+
+
+WORKFLOW:
+═════════════════════════════════════════════════════════════════════════════
+
+User → App.jsx → React Router
+  ↓
+Pages Components (pages/)
+  ↓
+Container Components (components/) + Business Logic (lib/)
+  ↓
+Database (db.js) + SessionStorage
+  ↓
+Update State → Re-render
+  ↓
+Display to User
+
+
+NEXT STEPS:
+═════════════════════════════════════════════════════════════════════════════
+
+1. cd /Users/jeetbiswas/Desktop/Revise
+2. npm install
+3. npm run dev
+4. Browser opens to http://localhost:5173
+5. Create account or login with demo credentials
+6. Start exploring!
+
+
+═══════════════════════════════════════════════════════════════════════════════
+All files are organized, configured, and ready to use! 🚀
+═══════════════════════════════════════════════════════════════════════════════
