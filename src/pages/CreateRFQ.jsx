@@ -51,7 +51,7 @@ const CreateRFQ = () => {
           forcedCloseTime: new Date(form.forcedClose),
           triggerWindowMinutes: parseInt(form.trigger) || 2,
           extensionDurationMinutes: parseInt(form.extension) || 2,
-          status: AUCTION_STATUS.SCHEDULED,
+          status: new Date(form.bidStart) <= new Date() ? 'active' : 'scheduled',
         });
       }
 

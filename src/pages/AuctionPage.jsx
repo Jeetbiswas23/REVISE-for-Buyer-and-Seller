@@ -134,7 +134,7 @@ const AuctionPage = () => {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <span className="text-sm uppercase text-gray-500 font-bold tracking-widest">
-                {auction.id.substring(0,12).toUpperCase()}
+                {auction._id.substring(0,12).toUpperCase()}
               </span>
               <span className="text-sm font-semibold tracking-wider px-3 py-1.5 rounded-md bg-zinc-800 text-gray-300">
                 {cur.symbol} {cur.code}
@@ -162,7 +162,7 @@ const AuctionPage = () => {
               <div>
                 <p className="text-sm tracking-widest text-emerald-400/80 uppercase font-bold mb-2">Contract Awarded</p>
                 <h2 className="text-4xl font-bold text-white mb-3">
-                  {formatCurrency(awardedBid.amount, currency)} — {getUserById(awardedBid.supplierId)?.company || 'Supplier'}
+                  {formatCurrency(awardedBid.amount, currency)} — {awardedBid.supplierId?.company || 'Supplier'}
                 </h2>
                 <p className="text-gray-300 text-lg leading-relaxed max-w-2xl">{awardedBid.offerDetails}</p>
                 {awardedBid.deliveryTimeline && (
@@ -424,7 +424,7 @@ const AuctionPage = () => {
                 ) : (
                   <div className="space-y-4">
                     {logs.map((log) => (
-                      <div key={log.id} className="p-5 rounded-xl bg-zinc-800 flex items-start gap-5 shadow-sm">
+                      <div key={log._id} className="p-5 rounded-xl bg-zinc-800 flex items-start gap-5 shadow-sm">
                         <span className={`text-xs px-3 py-1.5 rounded-md border tracking-widest font-bold shrink-0 mt-0.5 ${getLogEventColor(log.eventType)}`}>
                           {getLogEventLabel(log.eventType)}
                         </span>

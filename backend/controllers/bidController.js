@@ -12,15 +12,21 @@ export const placeBid = async (req, res) => {
     const auction = await Auction.findById(auctionId);
     if (!auction) return res.status(404).json({ message: 'Auction not found' });
 
-    if (auction.status !== 'active') {
-      return res.status(400).json({ message: 'Auction is not active' });
-    }
-
     const now = new Date();
-    if (now > auction.bidCloseTime) {
+    
+    if (auction.status !== 'closed' && now > auction.bidCloseTime) {
       auction.status = 'closed';
       await auction.save();
       return res.status(400).json({ message: 'Auction has already closed' });
+    }
+    
+    if (auction.status === 'scheduled' && now >= auction.bidStartTime && now < auction.bidCloseTime) {
+      auction.status = 'active';
+      await auction.save();
+    }
+
+    if (auction.status !== 'active') {
+      return res.status(400).json({ message: 'Auction is not active' });
     }
 
     const bid = await Bid.create({

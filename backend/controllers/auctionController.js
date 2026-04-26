@@ -3,6 +3,21 @@ import RFQ from '../models/RFQ.js';
 import Bid from '../models/Bid.js';
 import AuctionLog from '../models/AuctionLog.js';
 
+const updateAuctionStatus = async (auction) => {
+  const now = new Date();
+  let changed = false;
+  if (auction.status !== 'closed' && now >= auction.bidCloseTime) {
+    auction.status = 'closed';
+    changed = true;
+  } else if (auction.status === 'scheduled' && now >= auction.bidStartTime && now < auction.bidCloseTime) {
+    auction.status = 'active';
+    changed = true;
+  }
+  if (changed) {
+    await Auction.updateOne({ _id: auction._id }, { status: auction.status });
+  }
+};
+
 // @desc    Create an auction for an RFQ
 // @route   POST /api/auctions
 // @access  Private/Buyer
@@ -27,6 +42,8 @@ export const createAuction = async (req, res) => {
       extensionDurationMinutes,
       status: status || 'scheduled',
     });
+    
+    await updateAuctionStatus(auction);
 
     res.status(201).json(auction);
   } catch (error) {
@@ -50,9 +67,10 @@ export const getAuctions = async (req, res) => {
       .populate('rfqId', 'title description origin destination currency pickupDate buyerId')
       .sort({ createdAt: -1 });
 
-    // Attach basic bid stats
+    // Attach basic bid stats and update status
     const results = [];
     for (let auction of auctions) {
+      await updateAuctionStatus(auction);
       const bids = await Bid.find({ auctionId: auction._id }).sort({ amount: 1 });
       const obj = await auction.toObject();
       obj.bidCount = bids.length;
@@ -80,11 +98,14 @@ export const getAuctionById = async (req, res) => {
   try {
     const auction = await Auction.findById(req.params.id)
       .populate('rfqId', 'title description origin destination currency pickupDate buyerId')
-      .populate('awardedBidId');
+      .populate({ path: 'awardedBidId', populate: { path: 'supplierId', select: 'fullName company email' }});
 
     if (!auction) {
       return res.status(404).json({ message: 'Auction not found' });
     }
+    
+    await updateAuctionStatus(auction);
+    
     res.json(auction);
   } catch (error) {
     res.status(500).json({ message: error.message });
